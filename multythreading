@@ -1,0 +1,53 @@
+import sqlite3
+import threading
+import time
+
+
+def save_to_db(item):
+    conn = sqlite3.connect("my_database.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            value TEXT
+        )
+    """)
+
+    cursor.execute("INSERT INTO items (value) VALUES (?)", (item,))
+    conn.commit()
+    conn.close()
+    print(f"Saved item: {item}")
+
+
+
+def process_item(item):
+    
+    time.sleep(0.5)
+    save_to_db(item)
+
+
+
+def main():
+    
+
+    items = ['apple', 'banana', 'cherry']
+
+    threads = []
+    for item in items:
+        t = threading.Thread(target=process_item, args=(item,))
+        t.start()
+        threads.append(t)
+
+   
+    for t in threads:
+        t.join()
+
+    print("All items saved.")
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
