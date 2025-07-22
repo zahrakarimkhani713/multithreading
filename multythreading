@@ -1,5 +1,6 @@
-import sqlite3
+
 import threading
+import sqlite3
 import time
 
 
@@ -17,36 +18,25 @@ def save_to_db(item):
     conn.commit()
     conn.close()
     print(f"Saved item: {item}")
-
+    
 
 
 def process_item(item):
     
-    time.sleep(0.5)
+    time.sleep(1)
     save_to_db(item)
 
 
+if __name__ == "__main__":
+    list = ["a","b","d"]
+    length = len(list)
 
-def main():
-    
-
-    items = ['apple', 'banana', 'cherry']
-
-    threads = []
-    for item in items:
-        t = threading.Thread(target=process_item, args=(item,))
+    for i in range(0,length):
+        t= threading.Thread(target = process_item , args=(list[i],))
         t.start()
-        threads.append(t)
-
-   
-    for t in threads:
         t.join()
 
     print("All items saved.")
-
-if __name__ == "__main__":
-    main()
-
 
 
 
